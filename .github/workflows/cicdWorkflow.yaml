@@ -17,9 +17,9 @@ jobs:
               with:
                 scan-type: 'fs'
                 ignore-unfixed: true
-                format: 'sarif'
-                output: 'trivy-results.sarif'
-                severity: 'CRITICAL'
+                format: 'table'
+                output: 'trivy-results.txt'
+                severity: 'CRITICAL,HIGH'
                 exit-code: 1
             
             - name: Slack Notification
@@ -39,16 +39,11 @@ jobs:
                 SLACK_USERNAME: rtCamp
                 SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-            - name: slack upload file
-              if: failure()
-              uses: MeilCli/slack-upload-file@v3
+            - uses: MeilCli/slack-upload-file@v3
               with:
                   slack_token: ${{ secrets.SLACK_TOKEN }}
                   channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-                  content: 'file content'
-                  file_type: 'text'
-                  file_name: 'text.txt'
-                  title: 'title of file'
+                  file_path: 'trivy-results.txt'
                   initial_comment: 'post by slack-upload-file'
 
             - name: Install Cosign
