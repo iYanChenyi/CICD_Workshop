@@ -32,7 +32,7 @@ jobs:
                                 Matriculation number:A0287272W
                                 Email:E1285218@u.nus.edu
                                 GIT:https://github.com/iYanChenyi/CICD_Workshop.git
-                                IMAGE:'
+                                IMAGE:https://hub.docker.com/repository/docker/yanchenyi/cicd_workshop'
                 SLACK_TITLE: Post Title
                 SLACK_USERNAME: rtCamp
                 SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -62,20 +62,6 @@ jobs:
               with:
                   push: true
                   tags: yanchenyi/cicd_workshop:workshop_image
-            
-            - id: docker_meta
-              uses: docker/metadata-action@v4.4.0
-              with:
-                  images: ghcr.io/sigstore/sample-honk
-                  tags: type=sha,format=long
-            
-            - name: Build and Push container images
-              uses: docker/build-push-action@v4.0.0
-              id: build-and-push
-              with:
-                  platforms: linux/amd64,linux/arm/v7,linux/arm64
-                  push: true
-                  tags: ${{ steps.docker_meta.outputs.tags }}
             
                   # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
             - name: Sign image with a key
