@@ -26,11 +26,12 @@ jobs:
                 SLACK_CHANNEL: general
                 SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
                 SLACK_ICON: https://github.com/rtCamp.png?size=48
-                SLACK_MESSAGE: 'Post Content :rocket:|
-                                name: YanChenyi|
-                                Matriculation number:A0287272W|
-                                Email:E1285218@u.nus.edu|
-                                GIT:https://github.com/iYanChenyi/CICD_Workshop.git|
+                SLACK_MESSAGE: |
+                                'Post Content :rocket:
+                                name: YanChenyi
+                                Matriculation number:A0287272W
+                                Email:E1285218@u.nus.edu
+                                GIT:https://github.com/iYanChenyi/CICD_Workshop.git
                                 IMAGE:'
                 SLACK_TITLE: Post Title
                 SLACK_USERNAME: rtCamp
@@ -60,8 +61,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   push: true
-                  tags:
-                  user/app:
+                  tags: yanchenyi/cicd_workshop:workshop_image
             
             - id: docker_meta
               uses: docker/metadata-action@v4.4.0
