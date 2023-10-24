@@ -27,12 +27,11 @@ jobs:
                 SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
                 SLACK_ICON: https://github.com/rtCamp.png?size=48
                 SLACK_MESSAGE: |
-                                'Post Content :rocket:
                                 name: YanChenyi
                                 Matriculation number:A0287272W
                                 Email:E1285218@u.nus.edu
                                 GIT:https://github.com/iYanChenyi/CICD_Workshop.git
-                                IMAGE:https://hub.docker.com/repository/docker/yanchenyi/cicd_workshop'
+                                IMAGE:https://hub.docker.com/repository/docker/yanchenyi/cicd_workshop
                 SLACK_TITLE: Post Title
                 SLACK_USERNAME: rtCamp
                 SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -71,11 +70,10 @@ jobs:
                   # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
             - name: Sign image with a key
               run: |
-                      cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
+                      cosign sign --yes --key env://COSIGN_PRIVATE_KEY docker.io/yanchenyi/cicd_workshop:${{github.sha}}
 
               env:
                   COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
                   COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-                  DIGEST: ${{ steps.build-and-push.outputs.digest }}
             
                   
