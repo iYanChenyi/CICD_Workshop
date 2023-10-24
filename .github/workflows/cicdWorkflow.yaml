@@ -47,6 +47,9 @@ jobs:
                   file_name: 'text.txt'
                   title: 'title of file'
                   initial_comment: 'post by slack-upload-file'
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@v3.1.1
             
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v3
@@ -57,18 +60,20 @@ jobs:
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
-            - name: Build and push
+
+            - name: Build and Push container images
               uses: docker/build-push-action@v5
+              id: build-and-push
               with:
                   push: true
-                  tags: yanchenyi/cicd_workshop:workshop_image
+                  tags: yanchenyi/cicd_workshop:${{github.sha}}
             
                   # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
             - name: Sign image with a key
               run: |
                       cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
+
               env:
-                  TAGS: ${{ steps.docker_meta.outputs.tags }}
                   COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
                   COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
                   DIGEST: ${{ steps.build-and-push.outputs.digest }}
