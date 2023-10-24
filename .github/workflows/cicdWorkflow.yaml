@@ -7,6 +7,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        if: ${{ ! contains(github.event.commits[0].message, '#NORUN')}}
         steps:
             - name: Checkout
               uses: actions/checkout@v4.1.1
@@ -19,8 +20,10 @@ jobs:
                 format: 'sarif'
                 output: 'trivy-results.sarif'
                 severity: 'CRITICAL'
+                exit-code: 1
             
             - name: Slack Notification
+              if: failure()
               uses: rtCamp/action-slack-notify@v2
               env:
                 SLACK_CHANNEL: general
@@ -37,6 +40,7 @@ jobs:
                 SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
             - name: slack upload file
+              if: failure()
               uses: MeilCli/slack-upload-file@v3
               with:
                   slack_token: ${{ secrets.SLACK_TOKEN }}
