@@ -68,12 +68,9 @@ jobs:
                 push: true
                 tags: yanchenyi/cicd_workshop:${{github.sha}}
             
-            - name: name cosign key
-              run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-                  # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
             - name: Sign image with a key
               run: |
-                    cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}"
+                    cosign sign --yes --key env://COSIGN_PRIVATE_KEY docker.io/yanchenyi/cicd_workshop:${{github.sha}}
               env:
                   TAGS: yanchenyi/cicd_workshop:${{github.sha}}
                   COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
