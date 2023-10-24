@@ -49,6 +49,9 @@ jobs:
                   SLACK_MESSAGE: |
                                 *Scan failed - YanChenyi*
                                 Failed trivy scan, see uploaded report.
+                  SLACK_TITLE: Post Title
+                  SLACK_USERNAME: rtCamp
+                  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}    
 
             - name: slack upload file
               if: failure()
